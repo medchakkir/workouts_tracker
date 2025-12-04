@@ -36,7 +36,7 @@ The following environment variables need to be set:
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/momed-ali01/workouts_tracker.git
+git clone https://github.com/<username>/workouts_tracker.git
 cd workouts_tracker
 ```
 
