@@ -1,15 +1,19 @@
-from datetime import datetime
-import requests
 import os
+import requests
+from dotenv import load_dotenv
+from datetime import datetime
 
 # Load environment variables
-APP_ID = os.environ["ENV_APP_ID"]
-API_KEY = os.environ["ENV_API_KEY"]
-API_TOKEN = os.environ["ENV_API_TOKEN"]
-SHEET_ENDPOINT = os.environ["ENV_SHEET_ENDPOINT"]
+load_dotenv()
+
+# Environment variables
+app_id = os.getenv("APP_ID")
+api_key = os.getenv("API_KEY")
+api_token = os.getenv("API_TOKEN")
+sheet_endpoint = os.getenv("SHEET_ENDPOINT")
 
 # Define API endpoints
-EXERCISE_ENDPOINT = "https://trackapi.nutritionix.com/v2/natural/exercise"
+exercise_endpoint = "https://trackapi.nutritionix.com/v2/natural/exercise"
 
 
 def get_user_input(prompt):
@@ -34,19 +38,19 @@ def process_data(datas):
 
 # Set headers for API requests
 exercise_headers = {
-    "x-app-id": APP_ID,
-    "x-app-key": API_KEY
+    "x-app-id": app_id,
+    "x-app-key": api_key
 }
 
 sheet_headers = {
-    "Authorization": API_TOKEN
+    "Authorization": api_token
 }
 
 # Get user input for exercises
 exercise_text = get_user_input("Tell me which exercises you did: ")
 
 # Send exercise data to Nutritionix API
-response = requests.post(url=EXERCISE_ENDPOINT, json={"query": exercise_text}, headers=exercise_headers)
+response = requests.post(url=exercise_endpoint, json={"query": exercise_text}, headers=exercise_headers)
 exercises = response.json()["exercises"]
 
 # Process and log exercise data
@@ -55,5 +59,5 @@ for data in exercises:
     sheet_inputs = {"workout": workout}
     print(sheet_inputs)
 
-    sheet_response = requests.post(url=SHEET_ENDPOINT, json=sheet_inputs, headers=sheet_headers)
+    sheet_response = requests.post(url=sheet_endpoint, json=sheet_inputs, headers=sheet_headers)
     print(sheet_response.status_code)
